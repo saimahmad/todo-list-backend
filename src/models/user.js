@@ -49,12 +49,22 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+userSchema.methods.getPublicData = function() {
+    const user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
+    delete userObject.tokens;
+    delete userObject._id;
+    return userObject;
+}
+
 userSchema.methods.generateAuthToken = async function() {
     const user = this;
     //console.log(user)
     const token = jwt.sign({_id: user._id.toString()},"testingjwt");
 
     user.tokens = user.tokens.concat({ token });
+    console.log(user)
     await user.save()
     return token;
 }
@@ -65,9 +75,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if(!user) {
         throw new Error('unable to login');
     }
-
     const isMatch = await bcrypt.compare(password, user.password);
-
     if(!isMatch) {
         throw new Error('unable to login')
     }
@@ -75,14 +83,14 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user;
 }
 
-userSchema.pre('save',async function(next) {
-    const user = this;
-//    console.log(user.password)
-    user.password = await bcrypt.hash(user.password, 8);
-    // console.log(user.password)
-    // console.log("middleware called");
-    next();
-})
+// userSchema.pre('save',async function(next) {
+//     const user = this;
+// //    console.log(user.password)
+//     user.password = await bcrypt.hash(user.password, 8);
+//     // console.log(user.password)
+//     // console.log("middleware called");
+//     next();
+// })
 
 const User = mongoose.model('User',userSchema)
 
