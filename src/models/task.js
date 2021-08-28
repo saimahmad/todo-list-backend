@@ -14,6 +14,11 @@ const Task = mongoose.model("Task", {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'User'
+  },
+  position: {
+    type: Number,
+    required: true,
+    unique: true
   }
 });
 

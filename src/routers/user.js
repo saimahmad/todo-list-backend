@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs')
 
 const router = express.Router();
 
-router.post('/users',async (req, res) => {
+router.post('/users/signup',async (req, res) => {
     //console.log(req.body)
     //res.send(req.body)
     try{
@@ -22,6 +22,7 @@ router.post('/users',async (req, res) => {
 
 router.post('/users/login',async (req,res) => {
     try {
+        console.log(req.body)
         const user  = await User.findByCredentials(req.body.email, req.body.password);
         //console.log(user)
         const token = await user.generateAuthToken()
