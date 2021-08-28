@@ -2,6 +2,8 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 
+const bcrypt = require('bcryptjs')
+
 const router = express.Router();
 
 router.post('/users',async (req, res) => {
@@ -9,10 +11,10 @@ router.post('/users',async (req, res) => {
     //res.send(req.body)
     try{
         const user = new User(req.body);
-        user.password = await bcrypt.hash(user.password, 8); //password hashint
-        await user.generateAuthToken();
+        user.password = await bcrypt.hash(user.password, 8); //password hashing
+        const token = await user.generateAuthToken();
         //await user.save();
-        res.status(201).send(user.getPublicData());
+        res.status(201).send({user: user.getPublicData(),token:token});
     }catch(error) {
         res.status(400).send(error.message)
     }
