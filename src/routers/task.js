@@ -67,4 +67,15 @@ router.delete('/task/:id',auth,async (req,res) => {
     }
 })
 
+router.post('/tasks/order',auth,async (req,res) => {
+    try{
+        req.body.forEach(async (task) => {
+            await Task.findByIdAndUpdate(task._id,{position: task.position, completed: task.completed})
+        })
+        res.send()
+    }catch(error) {
+        res.status(500).send(error.message)
+    }
+})
+
 module.exports = router;

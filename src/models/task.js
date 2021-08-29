@@ -18,7 +18,6 @@ const Task = mongoose.model("Task", {
   position: {
     type: Number,
     required: true,
-    unique: true
   }
 });
 
