@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-mongoose.connect("mongodb://127.0.0.1:27017/todo-list-api", {
+const CONNECTION_URI = process.env.MONGOD_URI || "mongodb://127.0.0.1:27017/todo-list-api"
+mongoose.connect(CONNECTION_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
