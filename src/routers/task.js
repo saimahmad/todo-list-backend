@@ -4,10 +4,11 @@ const auth = require('../middleware/auth')
 
 const router = express.Router();
 
+//to save task
 router.post('/tasks',auth, async (req, res) => {
     
-    //res.send(req.body)
-    const task = new Task({
+
+    const task = new Task({    //adding owner field in task
         ...req.body,
         owner: req.user._id
     });
@@ -20,6 +21,7 @@ router.post('/tasks',auth, async (req, res) => {
 
 })
 
+//to get list of tasks of particular owner
 router.get('/tasks',auth,async (req, res) => {
     try{
         let data = await Task.find({owner: req.user._id});
@@ -29,20 +31,7 @@ router.get('/tasks',auth,async (req, res) => {
     }
 })
 
-// router.get('/task/:id',async (req, res) => {
-//     try{
-//         let _id = req.params.id;
-//         let data = await Task.findOne({_id:_id});
-//         if(!data) {
-//             res.status(404).send();
-//             return;
-//         }
-//         res.send(data);
-//     }catch(error){
-//         res.status(500).send(error.message)
-//     }
-// })
-
+//to update a particular task using its's id
 router.patch('/task/:id',auth, async (req,res) => {
     try{    
         const task = await Task.findOneAndUpdate({_id: req.params.id, owner: req.user._id},req.body,{new: true});
@@ -55,6 +44,7 @@ router.patch('/task/:id',auth, async (req,res) => {
     }
 })
 
+//delete a partical task using it's id
 router.delete('/task/:id',auth,async (req,res) => {
     try {
         let task = await Task.findOneAndDelete({_id: req.params.id, owner: req.user._id});
@@ -67,6 +57,8 @@ router.delete('/task/:id',auth,async (req,res) => {
     }
 })
 
+
+//changing order of task and completed status
 router.post('/tasks/order',auth,async (req,res) => {
     try{
         req.body.forEach(async (task) => {

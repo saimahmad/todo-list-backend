@@ -55,6 +55,7 @@ userSchema.methods.getPublicData = function() {
     return userObject;
 }
 
+//to generate authtoken when user signs up or logs in
 userSchema.methods.generateAuthToken = async function() {
     const user = this;
     //console.log(user)
@@ -79,15 +80,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
     return user;
 }
-
-// userSchema.pre('save',async function(next) {
-//     const user = this;
-// //    console.log(user.password)
-//     user.password = await bcrypt.hash(user.password, 8);
-//     // console.log(user.password)
-//     // console.log("middleware called");
-//     next();
-// })
 
 const User = mongoose.model('User',userSchema)
 

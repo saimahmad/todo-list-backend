@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs')
 
 const router = express.Router();
 
+//to signup user
 router.post('/users/signup',async (req, res) => {
     //console.log(req.body)
     //res.send(req.body)
@@ -20,6 +21,7 @@ router.post('/users/signup',async (req, res) => {
     }
 })
 
+//to login user
 router.post('/users/login',async (req,res) => {
     try {
         //console.log(req.body)
@@ -32,6 +34,7 @@ router.post('/users/login',async (req,res) => {
     }
 })
 
+//to logout user
 router.post('/users/logout',auth,async (req,res) => {
     try{
         req.user.tokens = req.user.tokens.filter(token => token.token != req.token)
@@ -42,6 +45,7 @@ router.post('/users/logout',auth,async (req,res) => {
     }
 })
 
+//to logout user from all sessions
 router.post('/users/logoutAll',auth,async (req,res) => {
     try{
         req.user.tokens = [];
@@ -52,6 +56,7 @@ router.post('/users/logoutAll',auth,async (req,res) => {
     }
 })
 
+//to get information like name using auth token
 router.get('/users/me',auth,(req, res) => {
     const user = req.user;
     res.send(user.getPublicData())
